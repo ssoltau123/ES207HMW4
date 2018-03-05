@@ -1,0 +1,97 @@
+---
+title: "Hoemwork 4"
+output: html_document
+---
+Homework 4 for ES 207 Spring 2018 Course
+
+Susan Soltau
+3/2/18
+
+Question 1 
+
+Exercises from chapter 14 (Data R)
+
+Exercises 14.2.5
+
+1) In code that doesn’t use stringr, you’ll often see paste() and paste0(). What’s the difference between the two functions? What stringr function are they equivalent to? How do the functions differ in their handling of NA?
+
+Amswer:
+
+```{r}
+library(tidyverse)
+library(stringr)
+```
+
+```{r}
+paste("drag", "on")
+paste0("drag", "on")
+```
+
+paste() spearates words, whie paste0() does not.  
+
+```{r}
+str_c("drag", "on")
+str_c("drag", NA)
+paste("drag", NA)
+paste0("drag", NA)
+```
+
+str_c is the closest to paste0() because it doesn't separate words either.  The two paste functions treat NA as another word to either combine or separate from the others.  However with str_c if NA is in the string, the output comes out as only NA.  
+
+2) In your own words, describe the difference between the sep and collapse arguments to str_c().
+
+Answer:
+
+sep is used within the vector to separate terms while collapse tells the function to separate the results and comes typically at the end of the string.  
+
+3) Use str_length() and str_sub() to extract the middle character from a string. What will you do if the string has an even number of characters?
+
+Answer:
+
+```{r}
+x <- c("dragon", "fae", "chimera", "ogre", "goblin")
+L <- str_length(x)
+m <- ceiling(L / 2)
+f<- floor(L/2)
+m
+str_sub(x, m, m)
+
+```
+
+ceiling function helps pick the highest number of characters so even if the string length is only 1, it will still pick the middle character.   For even characters you would need to combine floor and ceiling functions to help choose the middle 2 characters. 
+
+4) What does str_wrap() do? When might you want to use it?
+
+Answer: 
+
+str_wrap() helps wrap long strings to fit a certain length
+
+5) What does str_trim() do? What’s the opposite of str_trim()?
+
+Answer:
+
+str_trim() removes white space around a string while str_pad adds whitespace.
+
+6) Write a function that turns (e.g.) a vector c("a", "b", "c") into the string a, b, and c. Think carefully about what it should do if given a vector of length 0, 1, or 2.
+
+Answer:
+
+Check R.script 
+
+14.3.1.1 Exercises
+
+1) Explain why each of these strings don’t match a \: "\", "\\", "\\\".
+
+Answer:
+
+
+
+
+
+
+
+
+
+
+
+
