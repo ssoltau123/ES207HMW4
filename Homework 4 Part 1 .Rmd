@@ -1,0 +1,269 @@
+---
+title: "Hoemwork 4"
+output: html_document
+---
+Homework 4 for ES 207 Spring 2018 Course
+
+Susan Soltau
+3/2/18
+
+Question 1 
+
+Exercises from chapter 14 (Data R)
+
+Exercises 14.2.5
+
+1) In code that doesn’t use stringr, you’ll often see paste() and paste0(). What’s the difference between the two functions? What stringr function are they equivalent to? How do the functions differ in their handling of NA?
+
+Amswer:
+
+```{r}
+library(tidyverse)
+library(stringr)
+```
+
+```{r}
+paste("drag", "on")
+paste0("drag", "on")
+```
+
+paste() spearates words, whie paste0() does not.  
+
+```{r}
+str_c("drag", "on")
+str_c("drag", NA)
+paste("drag", NA)
+paste0("drag", NA)
+```
+
+str_c is the closest to paste0() because it doesn't separate words either.  The two paste functions treat NA as another word to either combine or separate from the others.  However with str_c if NA is in the string, the output comes out as only NA.  
+
+2) In your own words, describe the difference between the sep and collapse arguments to str_c().
+
+Answer:
+
+sep is used within the vector to separate terms while collapse tells the function to separate the results and comes typically at the end of the string.  
+
+3) Use str_length() and str_sub() to extract the middle character from a string. What will you do if the string has an even number of characters?
+
+Answer:
+
+```{r}
+x <- c("dragon", "fae", "chimera", "ogre", "goblin")
+L <- str_length(x)
+m <- ceiling(L / 2)
+f<- floor(L/2)
+m
+str_sub(x, m, m)
+
+```
+
+ceiling function helps pick the highest number of characters so even if the string length is only 1, it will still pick the middle character.   For even characters you would need to combine floor and ceiling functions to help choose the middle 2 characters. 
+
+4) What does str_wrap() do? When might you want to use it?
+
+Answer: 
+
+str_wrap() helps wrap long strings to fit a certain length
+
+5) What does str_trim() do? What’s the opposite of str_trim()?
+
+Answer:
+
+str_trim() removes white space around a string while str_pad adds whitespace.
+
+6) Write a function that turns (e.g.) a vector c("a", "b", "c") into the string a, b, and c. Think carefully about what it should do if given a vector of length 0, 1, or 2.
+
+Answer:
+
+Check R.script 
+
+14.3.1.1 Exercises
+
+1) Explain why each of these strings don’t match a \: "\", "\\", "\\\".
+
+Answer:
+
+\ tells you to escape the sprecial behavior of another character so you can match it exactly.  However, if you want to match the \ exactly, you need to escape from it again with added backslashes like \\ and.  If one wants to match \\ they need to add another backlash to it so it looks like \\\.  Essentially each backslash escapes the previous character so it matches the pre-backslash addition string exactly.  
+
+2)
+
+Answer:
+
+str_view("\"'\\", "\"'\\\\")
+
+3) What patterns will the regular expression \..\..\.. match? How would you represent it as a string?
+
+Answer:
+
+It will match any expression that is a character followed by a dot repeated 3 times
+
+str_view(c("w.d.i", "apple", "....."), c("\\..\\..\\"")
+
+14.3.2.1 Exercises
+
+1) How would you match the literal string "$^$"?
+
+str_view(c("$^$"), "^\\$\\^\\$$")
+
+2) Given the corpus of common words in stringr::words, create regular expressions that find all words that:
+
+A. Start with “y”.
+B. End with “x”
+C. Are exactly three letters long. (Don’t cheat by using str_length()!)
+D. Have seven letters or more.
+
+Answer:
+
+```{r}
+str_view(stringr::words, "^y", match =TRUE)
+str_view(stringr::words, "x$", match = TRUE)
+str_view(stringr::words, "^...$", match = TRUE)
+str_view(stringr::words, ".......", match = TRUE)
+```
+
+14.3.3.1 Exercises
+
+1) Create regular expressions to find all words that:
+
+  A. Start with a vowel.
+
+  B.That only contain consonants. (Hint: thinking   about matching “not”-vowels.)
+
+  C.End with ed, but not with eed.
+
+  D. End with ing or ise.
+  
+Answer:
+
+```{r}
+str_view(stringr::words, "^[aeiou]", match = TRUE)
+
+str_view(stringr::words, "^[^aeiou]", match=TRUE)
+
+str_view(stringr::words, "^ed$|[^e]ed$", match = TRUE)
+
+str_view(stringr::words, "i(ng|se)$", match = TRUE)
+```
+
+2) Empirically verify the rule “i before e except after c”.
+
+Answer: 
+```{r}
+str_view(stringr::words, "(cei|[^c]ie)", match = TRUE)
+```
+
+
+3) Is “q” always followed by a “u”?
+
+Answer:
+
+```{r}
+str_view(stringr::words, "^u[q]", match = TRUE)
+```
+
+"q" is always followed by a "u" in the case of this dataset at least.  
+
+4) Write a regular expression that matches a word if it’s probably written in British English, not American English.
+
+Answer:
+```{r}
+str_view(stringr::words, "ou$", match = TRUE)
+```
+
+The use of "ou"" is common in Bristish English vs. the "o" in American English.  
+
+5) Create a regular expression that will match telephone numbers as commonly written in your country.
+
+Answer:
+
+str_view(x, "[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9]")
+
+14.3.4.1 Exercises
+
+1) Describe the equivalents of ?, +, * in {m,n} form.
+
+Answer:  There is no * equivalent in {m,n}
+
+2) Describe in words what these regular expressions match: (read carefully to see if I’m using a regular expression or a string that defines a regular expression.)
+
+  A. ^.*$
+  B. "\\{.+\\}"
+  C. \d{4}-\d{2}-\d{2}
+  D. "\\\\{4}"
+  
+Answer:
+
+  A. "dragon" (works with any string)
+  B. {abc} (works with anything where one of the characters is in   curly brakets)
+  C. 1234-56-78 (Works with string of numbers of corresponding     lengths)
+  D. ////////
+  
+3) Create regular expressions to find all words that:
+
+  A. Start with three consonants.
+  B. Have three or more vowels in a row.
+  C. Have two or more vowel-consonant pairs in a row.
+  
+Answer:
+
+str_view(words, "^[^aeiou]{3}")
+
+str_view(words, "[aeiou]{3,}")
+
+str_view(words, "([aeiou][^aeiou]){2,}")
+
+
+14.3.5.1 Exercises
+
+1) Describe, in words, what these expressions will match:
+
+  A. (.)\1\1
+  B. "(.)(.)\\2\\1"
+  C. (..)\1
+  D. "(.).\\1.\\1"
+  E. "(.)(.)(.).*\\3\\2\\1"
+  
+Answer:
+
+A. Same character repeating 3 times
+B. A pair of characters repeating twice, but with the second set in reverse
+C. Any two characters repeated
+D. A series of 5 characters where it alternates between original and any starting with the first original character
+E. 3 characters followed by any character than repeated with the oiriginal 3 characters in reverse order.  
+
+
+
+2)Construct regular expressions to match words that:
+
+  A. Start and end with the same character.
+
+  B. Contain a repeated pair of letters (e.g. “church” contains   “ch” repeated twice.)
+
+  C. Contain one letter repeated in at least three places (e.g.   “eleven” contains three “e”s.)
+  
+Answer:
+
+str_view(words, "^(.).*\\1$")
+
+str_view(words, "(..).*\\1")
+
+str_subset(str_to_lower(words), "([a-z]).*\\1.*\\1")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
