@@ -1,0 +1,31 @@
+---
+title: "Hoemwork 4"
+output: html_document
+---
+Homework 4 for ES 207 Spring 2018 Course
+
+Susan Soltau
+3/2/18
+
+Question 1 
+
+Exercises from chapter 14 (Data R)
+
+Exercises 14.2.5
+
+1) In code that doesn’t use stringr, you’ll often see paste() and paste0(). What’s the difference between the two functions? What stringr function are they equivalent to? How do the functions differ in their handling of NA?
+
+
+```{r}
+library(tidyverse)
+library(stringr)
+```
+
+```{r}
+paste("drag", "on")
+paste0("drag", "on")
+```
+
+paste() spearates words, whie paste0() does not.  
+
+
