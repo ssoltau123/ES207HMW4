@@ -70,6 +70,25 @@ str_wrap() helps wrap long strings to fit a certain length
 
 Answer:
 
+str_trim() removes white space around a string while str_pad adds whitespace.
+
+6) Write a function that turns (e.g.) a vector c("a", "b", "c") into the string a, b, and c. Think carefully about what it should do if given a vector of length 0, 1, or 2.
+
+Answer:
+
+Check R.script 
+
+14.3.1.1 Exercises
+
+1) Explain why each of these strings don’t match a \: "\", "\\", "\\\".
+
+Answer:
+
+
+
+
+
+
 
 
 
