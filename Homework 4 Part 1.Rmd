@@ -84,6 +84,104 @@ Check R.script
 
 Answer:
 
+\ tells you to escape the sprecial behavior of another character so you can match it exactly.  However, if you want to match the \ exactly, you need to escape from it again with added backslashes like \\ and.  If one wants to match \\ they need to add another backlash to it so it looks like \\\.  Essentially each backslash escapes the previous character so it matches the pre-backslash addition string exactly.  
+
+2)
+
+Answer:
+
+str_view("\"'\\", "\"'\\\\")
+
+3) What patterns will the regular expression \..\..\.. match? How would you represent it as a string?
+
+Answer:
+
+It will match any expression that is a character followed by a dot repeated 3 times
+
+str_view(c("w.d.i", "apple", "....."), c("\\..\\..\\"")
+
+14.3.2.1 Exercises
+
+1) How would you match the literal string "$^$"?
+
+str_view(c("$^$"), "^\\$\\^\\$$")
+
+2) Given the corpus of common words in stringr::words, create regular expressions that find all words that:
+
+A. Start with “y”.
+B. End with “x”
+C. Are exactly three letters long. (Don’t cheat by using str_length()!)
+D. Have seven letters or more.
+
+Answer:
+
+```{r}
+str_view(stringr::words, "^y", match =TRUE)
+str_view(stringr::words, "x$", match = TRUE)
+str_view(stringr::words, "^...$", match = TRUE)
+str_view(stringr::words, ".......", match = TRUE)
+```
+
+14.3.3.1 Exercises
+
+1) Create regular expressions to find all words that:
+
+  A. Start with a vowel.
+
+  B.That only contain consonants. (Hint: thinking   about matching “not”-vowels.)
+
+  C.End with ed, but not with eed.
+
+  D. End with ing or ise.
+  
+Answer:
+
+```{r}
+str_view(stringr::words, "^[aeiou]", match = TRUE)
+
+str_view(stringr::words, "^[^aeiou]", match=TRUE)
+
+str_view(stringr::words, "^ed$|[^e]ed$", match = TRUE)
+
+str_view(stringr::words, "i(ng|se)$", match = TRUE)
+```
+
+2) Empirically verify the rule “i before e except after c”.
+
+Answer: 
+```{r}
+str_view(stringr::words, "(cei|[^c]ie)", match = TRUE)
+```
+
+
+3) Is “q” always followed by a “u”?
+
+Answer:
+
+```{r}
+str_view(stringr::words, "^u[q]", match = TRUE)
+```
+
+"q" is always followed by a "u" in the case of this dataset at least.  
+
+4) Write a regular expression that matches a word if it’s probably written in British English, not American English.
+
+Answer:
+```{r}
+str_view(stringr::words, "ou$", match = TRUE)
+```
+
+The use of "ou"" is common in Bristish English vs. the "o" in American English.  
+
+5) Create a regular expression that will match telephone numbers as commonly written in your country.
+
+Answer:
+
+str_view(x, "[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9]")
+
+
+
+
 
 
 
