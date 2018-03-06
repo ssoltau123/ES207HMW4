@@ -122,7 +122,7 @@ str_view(stringr::words, "^...$", match = TRUE)
 str_view(stringr::words, ".......", match = TRUE)
 ```
 
-14.3.3.1 Exercises
+Exercise 14.3.3.1 
 
 1) Create regular expressions to find all words that:
 
@@ -179,7 +179,7 @@ Answer:
 
 str_view(x, "[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9]")
 
-14.3.4.1 Exercises
+Exercise 14.3.4.1 
 
 1) Describe the equivalents of ?, +, * in {m,n} form.
 
@@ -214,7 +214,7 @@ str_view(words, "[aeiou]{3,}")
 str_view(words, "([aeiou][^aeiou]){2,}")
 
 
-14.3.5.1 Exercises
+Exercise 14.3.5.1 
 
 1) Describe, in words, what these expressions will match:
 
@@ -234,7 +234,7 @@ E. 3 characters followed by any character than repeated with the oiriginal 3 cha
 
 
 
-2)Construct regular expressions to match words that:
+2) Construct regular expressions to match words that:
 
   A. Start and end with the same character.
 
@@ -249,6 +249,168 @@ str_view(words, "^(.).*\\1$")
 str_view(words, "(..).*\\1")
 
 str_subset(str_to_lower(words), "([a-z]).*\\1.*\\1")
+
+14.4.4.2 Exercises
+
+1) For each of the following challenges, try solving it by using both a single regular expression, and a combination of multiple str_detect() calls.
+
+  A. Find all words that start or end with x.
+
+  B. Find all words that start with a vowel and end with a     
+  consonant.
+
+  C. Are there any words that contain at least one of each   
+  different vowel?
+  
+Answer:
+
+words[str_detect(words, "^x|x$")]
+
+str_subset(words, "^[aeiou].*[^aeiou]$")
+
+words[str_detect(words, "a") &
+        str_detect(words, "e") &
+        str_detect(words, "i") &
+        str_detect(words, "o") &
+        str_detect(words, "u")]
+
+
+2) What word has the highest number of vowels? What word has the highest proportion of vowels? (Hint: what is the denominator?)
+
+Answer: 
+
+str_count(words, "[aeiou]") / str_length(words)
+
+Exercise 14.4.3.1 
+
+1) In the previous example, you might have noticed that the regular expression matched “flickered”, which is not a colour. Modify the regex to fix the problem.
+
+Answer:
+
+colour_match2 <- str_c("\\b(", str_c(colours, collapse = "|"), ")\\b")
+colour_match2
+
+2) From the Harvard sentences data, extract:
+
+  A. The first word from each sentence.
+  B. All words ending in ing.
+  C. All plurals.
+
+Answer:
+
+str_extract(sentences, "[a-zA-X]+") %>% head()
+
+pattern <- "\\b[A-Za-z]+ing\\b"
+ing <- str_detect(sentences, pattern)
+
+unique(unlist(str_extract_all(sentences, "\\b[A-Za-z]{3,}s\\b"))) %>%
+  head()
+  
+Exercise 14.4.4.1 
+
+1) Find all words that come after a “number” like “one”, “two”, “three” etc. Pull out both the number and the word.
+
+Answer: 
+
+numword <- "(one|two|three|four|five|six|seven|eight|nine|ten) +(\\S+)"
+sentences[str_detect(sentences, numword)] 
+
+2) Find all contractions. Separate out the pieces before and after the apostrophe.
+
+Answer:
+
+contraction <- "([A-Za-z]+)'([A-Za-z]+)"
+
+Exercise 14.4.5.1 
+
+1) Replace all forward slashes in a string with backslashes.
+
+Answer:
+backslashed <- str_replace_all("past/present/future", "\\/", "\\\\")
+writeLines(backslashed)
+
+2) Implement a simpleversion of str_to_lower() using replace_all().
+
+Answer:
+lower <- str_replace_all(words, c("A"="a", "B"="b", "C"="c", "D"="d", "E"="e", "F"="f", "G"="g", "H"="h", "I"="i", "J"="j", "K"="k", "L"="l", "M"="m", "N"="n", "O"="o", "P"="p", "Q"="q", "R"="r", "S"="s", "T"="t", "U"="u", "V"="v", "W"="w", "X"="x", "Y"="y", "Z"="z"))
+
+3) Switch the first and last letters in words. Which of those strings are still words?
+
+Answer:
+swap <- str_replace_all(words, "^([A-Za-z])(.*)([a-z])$", "\\3\\2\\1")
+
+Exercise 14.4.6.1
+
+1) Split up a string like "apples, pears, and bananas" into individual components.
+
+Answer:
+
+```{r}
+x <- c("apples, pears, and bananas")
+str_split(x, ", +(and +)?")[[1]]
+```
+
+2) Why is it better to split up by boundary("word") than " "?
+
+Answer: 
+
+boundry("word") splits words and punctuations and not just whitespace
+
+3) What does splitting with an empty string ("") do? Experiment, and then read the documentation.
+
+Answer:
+
+It splits the invidual characters
+
+Exercise 14.5.1
+
+1) How would you find all strings containing \ with regex() vs. with fixed()?
+
+Answer: 
+
+With regex(), you will need to escape the command  with another backslash.  However with fixed() you would be able to give it the exact pattern you are looking for without the need to escape.  
+
+2) What are the five most common words in sentences?
+
+Answer:
+
+```{r}
+str_extract_all(sentences, boundary("word")) %>%
+  unlist() %>%
+  str_to_lower() %>%
+  tibble() %>%
+  set_names("word") %>%
+  group_by(word) %>%
+  count(sort = TRUE) %>%
+  head(5)
+```
+
+Exercise 14.7.1
+
+1) Find the stringi functions that:
+
+  A. Count the number of words.
+  B. Find duplicated strings.
+  C. Generate random text.
+  
+Answer:
+  
+  A. str_count
+  B. str_duplicated
+  C. str_rand_
+
+2) How do you control the language that stri_sort() uses for sorting?
+
+Answer:
+
+Use the "locale"" argument
+
+
+
+
+
+
+
 
 
 
