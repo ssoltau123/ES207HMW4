@@ -1,0 +1,46 @@
+---
+title: "Homework 4 Questions 2-12"
+output: html_document
+---
+
+Question 2
+
+What class is o3.filelist? What does it contain?
+
+Answer:
+
+The o3.filelist is a list of text files that contain ozone data for a variety of lication within California on a hourly basis speaprated into years ranging from 1980 to 2011.  
+
+Question 3
+
+Using ~ 1 sentence per line in the above code, explain what each line in the code is doing.
+
+Answer:
+
+setwd("ca_ozone)
+```{r}
+require(readr)
+o3.filenames <- list.files(pattern = ".txt")
+o3.filelist <- lapply(o3.filenames, read_delim, delim = "|")
+names(o3.filelist) <- gsub(".txt","", o3.filenames)
+```
+
+You first tell R to set your working directory to the ca.ozone folder.  You than tell R to require the readr package so it can use the required functions to carry out the remaining lines.  You create a file list by looking for all the files that have the ".txt" extension in them.  Since they are text files with no defined columns and rows, you want to clean it up with lapply creating a spreadsheet by separating each chunk of information that are wrapped with a "|".  
+
+Question 4
+
+Rewrite the code above using the stringr package insead of grep{base}.
+
+Answer:
+
+which(str_detect(o3.filenames, ".txt"))
+
+
+
+library(data.table)
+library(tidyverse)
+daily <- o3.filelist %>%
+  rbindlist() %>%
+  group_by(site = as.factor(site), date) %>%
+  summarize(o3 = mean(obs, na.rm = TRUE))
+daily
