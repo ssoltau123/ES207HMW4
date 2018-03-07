@@ -17,7 +17,8 @@ Using ~ 1 sentence per line in the above code, explain what each line in the cod
 
 Answer:
 
-setwd("ca_ozone)
+library(tidyverse)
+setwd("ca_ozone")
 ```{r}
 require(readr)
 o3.filenames <- list.files(pattern = ".txt")
@@ -33,9 +34,14 @@ Rewrite the code above using the stringr package insead of grep{base}.
 
 Answer:
 
-which(str_detect(o3.filenames, ".txt"))
+```{r}
+which(str_detect(o3.filelist, ".txt"))
+str_replace(o3.filelist, ".txt", "")
+```
 
+Question 5
 
+Rewrite the code above using traditional object-based R programming instead of the piping operator.
 
 library(data.table)
 library(tidyverse)
@@ -44,3 +50,64 @@ daily <- o3.filelist %>%
   group_by(site = as.factor(site), date) %>%
   summarize(o3 = mean(obs, na.rm = TRUE))
 daily
+
+Answer:
+
+install.packages("data.table")
+```{r}
+library(data.table)
+bind<-rbindlist(o3.filelist)
+group<-group_by(bind, site=as.factor(site))
+summarize(group = mean(obs, na-rm=TRUE))
+
+```
+
+Question 6
+
+Summarize the o3 data above by site and by month and by year using a piping operator (the monthly mean o3 for each site for each year).
+
+Answer:
+
+```{r}
+monthly <- o3.filelist %>%
+  rbindlist() %>%
+  mutate(year = format(date, "%Y"),month = format(date, "%m")) %>%
+  group_by(site = as.factor(site),year, month) %>%
+  summarize(o3 = mean(obs, na.rm = TRUE))
+monthly
+```
+
+Question 8
+
+How many site names in the CA air quality location dataset “Site Name” contain “San” or “Santa?”.
+
+Answer:
+
+library(readxl)
+location <- read_excel("location.xls")
+View(location)
+
+```{r}
+str_detect(location, "San")
+str_which(location, "San") #just went ahead and added the list of numbers here (Site names with "San" or "Santa" equals 95)
+str_count(location, "San")
+str_length(location)
+```
+
+Question 9:
+
+Identify the number of sites that do not have a complete address (full street address and zip code)
+
+Answer:
+
+```{r}
+str_which(location$Address, "Address Not Known")
+str_which(location, "Location Approximate")
+str_which(location$'Zip Code', "\\b..\\b") #incomplete Zip Code (only 2 digits?)
+
+sum(is.na(location$Address))
+sum(is.na(location$`Zip Code`))
+length(unique(location[is.na(location$Address) | is.na(location$`Zip Code`),]$Site))
+
+```
+
