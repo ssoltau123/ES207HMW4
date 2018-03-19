@@ -3,6 +3,18 @@ title: "Homework 4 Questions 2-12"
 output: html_document
 ---
 
+##### JULIA'S COMMENTS #####
+Susan, good work! Here are some comments to improve your code. 
+* You don't make any comments on your code, and it makes it a little difficult to follow. It's always helpful if someone is going to read over your code to make comments to help them follow your thought process. 
+* It doesn't appear that you loaded all the packages that you need for this assignment, specifically tidyverse. 
+* To the above point, you have code that is outside of chunks, without the code being in a chunk, it makes it diffcult to quickly run and troubleshoot because you would have to manually run the line or copy and paste it into the console. It's best to keep all the code in chunks. You can go to "Code" and then "Insert Chunk" in the code above. 
+* I couldn't get your function to run, but it doesn't look rigid or fragile. If you needed to search for data that didn't have "san" or "santa" in it, you definitely could!
+
+Overall, you could definitely clean up your code with comments and containing all your code in chunks. Keep up the good work. 
+
+##### End of Julia's Comments #####
+
+
 Question 2
 
 What class is o3.filelist? What does it contain?
@@ -55,7 +67,7 @@ Answer:
 
 install.packages("data.table")
 ```{r}
-library(data.table)
+#library(data.table)
 bind<-rbindlist(o3.filelist)
 group<-group_by(bind, site=as.factor(site))
 summarize(group = mean(obs, na-rm=TRUE))
@@ -101,6 +113,7 @@ hourly <- o3.filelist
   group_by_(o3.filelist, start_hour) 
   summarize(o3 = mean(obs, na.rm = TRUE))
 )
+
 ```
 
 
@@ -162,6 +175,7 @@ Stats <- function(x,y,z){
    summarize(annual_mean = mean(obs, na.rm = TRUE), annual_median = median(obs, na.rm = TRUE),annual_max = max(obs, na.rm = TRUE),annual_min = min(obs, na.rm = TRUE) )
     annual
     }
+
 Stats(str_detect(daily.site),"San","Santa") 
   
 
